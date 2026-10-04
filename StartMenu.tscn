@@ -1,66 +1,25 @@
 [gd_scene format=3 uid="uid://0iil1vc11h53"]
 
-[ext_resource type="Script" uid="uid://df4fpgvkb7cup" path="res://Scripts/StartMenu.cs" id="1_hocyr"]
-[ext_resource type="PackedScene" uid="uid://dskmjt1in330f" path="res://main.tscn" id="2_64ydg"]
+[ext_resource type="Script" uid="uid://df4fpgvkb7cup" path="res://Scripts/StartMenu.cs" id="1_start"]
+[ext_resource type="Texture2D" uid="uid://8uk1no0nn02" path="res://Art/StartMenu/01开始界面底图.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://dg5tmg0rb5hn1" path="res://Art/StartMenu/01囚知.png" id="3_title"]
+[ext_resource type="Texture2D" uid="uid://8nnw1u5746uy" path="res://Art/StartMenu/01开始观测.png" id="4_start"]
+[ext_resource type="Texture2D" uid="uid://bxmkdkc6jg4s0" path="res://Art/StartMenu/01设置.png" id="5_settings"]
+[ext_resource type="Texture2D" uid="uid://cpudoi87xsrvl" path="res://Art/StartMenu/01制作人.png" id="6_credits"]
+[ext_resource type="Texture2D" uid="uid://bo4rwyg5j72f0" path="res://Art/StartMenu/01开始界面UI整体效果.png" id="7_ref"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title_slot"]
-bg_color = Color(1, 1, 1, 0)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.85, 0.15, 0.15, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btn"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_circle_lg"]
-bg_color = Color(0.92, 0.92, 0.92, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.08, 0.08, 0.08, 1)
-corner_radius_top_left = 999
-corner_radius_top_right = 999
-corner_radius_bottom_right = 999
-corner_radius_bottom_left = 999
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_circle_md"]
-bg_color = Color(0.92, 0.92, 0.92, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.08, 0.08, 0.08, 1)
-corner_radius_top_left = 999
-corner_radius_top_right = 999
-corner_radius_bottom_right = 999
-corner_radius_bottom_left = 999
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_empty"]
-bg_color = Color(1, 1, 1, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_circle_sm"]
-bg_color = Color(0.92, 0.92, 0.92, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.08, 0.08, 0.08, 1)
-corner_radius_top_left = 999
-corner_radius_top_right = 999
-corner_radius_bottom_right = 999
-corner_radius_bottom_left = 999
-
-[node name="StartMenu" type="Control" unique_id=570037304]
+[node name="StartMenu" type="Control" unique_id=1704820091]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_hocyr")
-GameScene = ExtResource("2_64ydg")
+script = ExtResource("1_start")
 
-[node name="Background" type="ColorRect" parent="." unique_id=2072248855]
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1129186376]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,236 +27,116 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.88, 0.88, 0.88, 1)
+color = Color(0, 0, 0, 1)
 
-[node name="Rings" type="Control" parent="." unique_id=1528436745]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Stage" type="Control" parent="." unique_id=921761849]
+texture_filter = 4
+anchors_preset = 0
+offset_left = -1.125
+offset_right = 2734.875
+offset_bottom = 1536.0
+scale = Vector2(0.421875, 0.421875)
 mouse_filter = 2
 
-[node name="TitleSlots" type="Control" parent="." unique_id=942468944]
-custom_minimum_size = Vector2(420, 72)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -180.0
-offset_right = 210.0
-offset_bottom = -108.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Background" type="TextureRect" parent="Stage" unique_id=2039240540]
+layout_mode = 0
+offset_right = 2736.0
+offset_bottom = 1536.0
 mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
 
-[node name="HBox" type="HBoxContainer" parent="TitleSlots" unique_id=1438977018]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 14
-alignment = 1
+[node name="Title" type="TextureRect" parent="Stage" unique_id=1947957569]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 296.0
+offset_right = 911.0
+offset_bottom = 965.0
+mouse_filter = 2
+texture = ExtResource("3_title")
+expand_mode = 1
 
-[node name="Slot1" type="Panel" parent="TitleSlots/HBox" unique_id=1528247677]
-custom_minimum_size = Vector2(56, 56)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_title_slot")
-
-[node name="Slot2" type="Panel" parent="TitleSlots/HBox" unique_id=609613471]
-custom_minimum_size = Vector2(160, 56)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_title_slot")
-
-[node name="Slot3" type="Panel" parent="TitleSlots/HBox" unique_id=1258317862]
-custom_minimum_size = Vector2(72, 56)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_title_slot")
-
-[node name="Slot4" type="Panel" parent="TitleSlots/HBox" unique_id=1786302924]
-custom_minimum_size = Vector2(72, 56)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_title_slot")
-
-[node name="StartButton" type="Button" parent="." unique_id=2051499985]
-custom_minimum_size = Vector2(180, 180)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.0
-offset_top = -90.0
-offset_right = 90.0
-offset_bottom = 90.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="SettingsButton" type="Button" parent="Stage" unique_id=647865463]
+layout_mode = 0
+offset_left = 751.0
+offset_top = 863.0
+offset_right = 975.0
+offset_bottom = 1027.0
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxFlat_circle_lg")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_circle_lg")
-theme_override_styles/hover = SubResource("StyleBoxFlat_circle_lg")
-theme_override_styles/focus = SubResource("StyleBoxFlat_circle_lg")
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 flat = true
 
-[node name="Label" type="Label" parent="StartButton" unique_id=19853084]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 36
-text = "开始
-游戏"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Art" type="TextureRect" parent="Stage/SettingsButton" unique_id=214563426]
+layout_mode = 0
+offset_left = -160.0
+offset_top = -74.0
+offset_right = 368.0
+offset_bottom = 238.0
+mouse_filter = 2
+texture = ExtResource("5_settings")
+expand_mode = 1
 
-[node name="ArchiveButton" type="PanelContainer" parent="." unique_id=1111223878]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -293.0
-offset_top = 173.0
-offset_right = -173.0
-offset_bottom = 293.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_circle_md")
-
-[node name="Content" type="Control" parent="ArchiveButton" unique_id=1474396242]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 2
-
-[node name="Hit" type="Button" parent="ArchiveButton/Content" unique_id=640436551]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_empty")
+[node name="CreditsButton" type="Button" parent="Stage" unique_id=479352218]
+layout_mode = 0
+offset_left = 108.0
+offset_top = 1007.0
+offset_right = 422.0
+offset_bottom = 1218.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 flat = true
 
-[node name="Label" type="Label" parent="ArchiveButton/Content" unique_id=1971756838]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 28
-text = "存档"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Art" type="TextureRect" parent="Stage/CreditsButton" unique_id=1565456421]
+layout_mode = 0
+offset_left = -115.0
+offset_top = -50.0
+offset_right = 413.0
+offset_bottom = 262.0
+mouse_filter = 2
+texture = ExtResource("6_credits")
+expand_mode = 1
 
-[node name="CreditsButton" type="PanelContainer" parent="." unique_id=2042881413]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 117.0
-offset_top = -249.0
-offset_right = 217.0
-offset_bottom = -149.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_circle_sm")
-
-[node name="Content" type="Control" parent="CreditsButton" unique_id=443730464]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-
-[node name="Hit" type="Button" parent="CreditsButton/Content" unique_id=1244190844]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_empty")
+[node name="StartButton" type="Button" parent="Stage" unique_id=376527708]
+layout_mode = 0
+offset_left = 1964.0
+offset_top = 1233.0
+offset_right = 2410.0
+offset_bottom = 1433.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 flat = true
 
-[node name="Label" type="Label" parent="CreditsButton/Content" unique_id=954131032]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 22
-text = "制作者"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Art" type="TextureRect" parent="Stage/StartButton" unique_id=1698850059]
+layout_mode = 0
+offset_left = -36.0
+offset_top = -85.0
+offset_right = 492.0
+offset_bottom = 227.0
+mouse_filter = 2
+texture = ExtResource("4_start")
+expand_mode = 1
 
-[node name="SettingsButton" type="PanelContainer" parent="." unique_id=435514430]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 149.0
-offset_top = 117.0
-offset_right = 249.0
-offset_bottom = 217.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_circle_sm")
-
-[node name="Content" type="Control" parent="SettingsButton" unique_id=894401829]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-
-[node name="Hit" type="Button" parent="SettingsButton/Content" unique_id=652035399]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_empty")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_empty")
-flat = true
-
-[node name="Label" type="Label" parent="SettingsButton/Content" unique_id=318980219]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 22
-text = "设置"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="LayoutReference" type="TextureRect" parent="Stage" unique_id=762803036]
+visible = false
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 0
+offset_right = 2736.0
+offset_bottom = 1536.0
+mouse_filter = 2
+texture = ExtResource("7_ref")
+expand_mode = 1

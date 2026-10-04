@@ -3,6 +3,18 @@
 [ext_resource type="Script" uid="uid://v8nhepx3scjf" path="res://Scripts/Player.cs" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://duohr0nhok8t0" path="res://Scripts/ShardGuide.cs" id="2_5vw27"]
 [ext_resource type="PackedScene" uid="uid://cjjuwlbcab5mq" path="res://Sphere.tscn" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://c8qbjjqj6djja" path="res://Art/PlayMenu/PNG/hint_backplate.png" id="4_hint"]
+[ext_resource type="Texture2D" uid="uid://bmy0uomyqtjnc" path="res://Art/PlayMenu/PNG/task_backplate.png" id="5_task"]
+[ext_resource type="Texture2D" uid="uid://bxfy0c22adauf" path="res://Art/PlayMenu/PNG/dialogue_backplate.png" id="6_dialog"]
+[ext_resource type="Texture2D" uid="uid://5oykm4618c8u" path="res://Art/PlayMenu/PNG/key_E.png" id="7_keye"]
+[ext_resource type="Texture2D" uid="uid://ce4s5orq057dj" path="res://Art/PlayMenu/PNG/key_F.png" id="8_keyf"]
+[ext_resource type="Texture2D" uid="uid://30w72sqoduid" path="res://Art/PlayMenu/PNG/key_1.png" id="9_key1"]
+[ext_resource type="Texture2D" uid="uid://cp3xe5rn8qcii" path="res://Art/PlayMenu/PNG/key_2.png" id="10_key2"]
+[ext_resource type="Texture2D" uid="uid://nthgvjkvrsru" path="res://Art/PlayMenu/PNG/slot_wand_selected.png" id="11_slotwand"]
+[ext_resource type="Texture2D" uid="uid://dyigogo03v4yp" path="res://Art/PlayMenu/PNG/slot_postcard_selected.png" id="12_slotcard"]
+[ext_resource type="Texture2D" uid="uid://r425l68rdf6f" path="res://Art/PlayMenu/PNG/reticle_idle.png" id="13_reticle"]
+[ext_resource type="Texture2D" uid="uid://g32q2stcvurp" path="res://Art/PlayMenu/PNG/continue_mark.png" id="14_continue"]
+[ext_resource type="Texture2D" uid="uid://d03cu40vnt5vr" path="res://Art/PlayMenu/02_提示与对话_透明叠加.png" id="15_layoutref"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xxo5k"]
 height = 1.9467773
@@ -21,53 +33,12 @@ transparency = 1
 shading_mode = 0
 albedo_color = Color(0.72156864, 0.7921569, 0, 0.40392157)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjqgx"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.11764706, 0.11764706, 0.11764706, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
+[sub_resource type="SystemFont" id="SystemFont_hud"]
+font_names = PackedStringArray("Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC")
+font_weight = 400
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task"]
-bg_color = Color(1, 1, 1, 0.55)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.2, 0.2, 0.2, 0.35)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-content_margin_left = 24.0
-content_margin_top = 10.0
-content_margin_right = 24.0
-content_margin_bottom = 10.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
-bg_color = Color(0.82, 0.82, 0.82, 0.92)
-border_width_top = 4
-border_color = Color(0.1, 0.1, 0.1, 1)
-content_margin_left = 32.0
-content_margin_top = 24.0
-content_margin_right = 32.0
-content_margin_bottom = 24.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_item_icon"]
-bg_color = Color(0.55, 0.35, 0.85, 1)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
+[sub_resource type="Theme" id="Theme_hud"]
+default_font = SubResource("SystemFont_hud")
 
 [node name="Main" type="Node3D" unique_id=898802338]
 
@@ -117,25 +88,23 @@ light_energy = 16.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1200127405]
 
-[node name="InteractHint" type="Label" parent="UI" unique_id=325532943]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -188.0
-offset_right = 160.0
-offset_bottom = -148.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 28
-text = "按 F 交互"
-horizontal_alignment = 1
-visible = false
-
 [node name="KeyHints" type="Control" parent="UI" unique_id=2090555456]
+texture_filter = 4
+theme = SubResource("Theme_hud")
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -44.0
+offset_top = -46.0
+offset_right = -44.0
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HintE" type="Control" parent="UI/KeyHints" unique_id=1315001744]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -143,102 +112,139 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/KeyHints" unique_id=1538754070]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 320.0
-offset_bottom = 100.0
-theme_override_constants/separation = 8
-
-[node name="HintF" type="HBoxContainer" parent="UI/KeyHints/VBoxContainer" unique_id=1315001743]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Key" type="PanelContainer" parent="UI/KeyHints/VBoxContainer/HintF" unique_id=37923688]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+[node name="Backplate" type="TextureRect" parent="UI/KeyHints/HintE" unique_id=1315001745]
+layout_mode = 0
+offset_left = 60.6
+offset_top = 66.5
+offset_right = 239.1
+offset_bottom = 98.9
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
+texture = ExtResource("4_hint")
+expand_mode = 1
 
-[node name="KeyLabel" type="Label" parent="UI/KeyHints/VBoxContainer/HintF/Key" unique_id=1982736401]
-layout_mode = 2
+[node name="Key" type="TextureRect" parent="UI/KeyHints/HintE" unique_id=37923689]
+layout_mode = 0
+offset_left = 69.5
+offset_top = 68.6
+offset_right = 96.4
+offset_bottom = 95.5
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 16
-text = "F"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("7_keye")
+expand_mode = 1
 
-[node name="Desc" type="Label" parent="UI/KeyHints/VBoxContainer/HintF" unique_id=1982736402]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 14
-text = "按下按钮/获取理智"
-vertical_alignment = 1
-
-[node name="HintE" type="HBoxContainer" parent="UI/KeyHints/VBoxContainer" unique_id=1315001744]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Key" type="PanelContainer" parent="UI/KeyHints/VBoxContainer/HintE" unique_id=37923689]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
-
-[node name="KeyLabel" type="Label" parent="UI/KeyHints/VBoxContainer/HintE/Key" unique_id=1982736403]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 16
-text = "E"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Desc" type="Label" parent="UI/KeyHints/VBoxContainer/HintE" unique_id=1982736404]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+[node name="Desc" type="Label" parent="UI/KeyHints/HintE" unique_id=1982736404]
+layout_mode = 0
+offset_left = 105.3
+offset_top = 72.0
+offset_right = 230.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
 theme_override_font_sizes/font_size = 14
 text = "重力切换"
 vertical_alignment = 1
 
+[node name="InteractHint" type="Label" parent="UI" unique_id=325532943]
+visible = false
+texture_filter = 4
+theme = SubResource("Theme_hud")
+offset_left = 61.3
+offset_top = 61.8
+offset_right = 61.3
+offset_bottom = 85.8
+theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
+theme_override_font_sizes/font_size = 14
+text = "按下按钮 / 获取理智"
+vertical_alignment = 1
+
+[node name="Backplate" type="TextureRect" parent="UI/InteractHint" unique_id=325532944]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -44.2
+offset_top = -5.5
+offset_right = 54.4
+offset_bottom = 3.3
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_hint")
+expand_mode = 1
+
+[node name="Key" type="TextureRect" parent="UI/InteractHint" unique_id=325532945]
+layout_mode = 0
+offset_left = -35.8
+offset_top = -3.4
+offset_right = -8.9
+offset_bottom = 23.5
+mouse_filter = 2
+texture = ExtResource("8_keyf")
+expand_mode = 1
+
 [node name="TaskHint" type="Control" parent="UI" unique_id=647993940]
+texture_filter = 4
+theme = SubResource("Theme_hud")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -30.0
+offset_right = 0.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Bar" type="PanelContainer" parent="UI/TaskHint" unique_id=647993941]
-custom_minimum_size = Vector2(320, 0)
+[node name="Backplate" type="TextureRect" parent="UI/TaskHint" unique_id=647993941]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -240.0
-offset_top = 20.0
-offset_right = 240.0
-offset_bottom = 68.0
+offset_left = -180.2
+offset_top = 49.7
+offset_right = 181.9
+offset_bottom = 93.5
 grow_horizontal = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_task")
+texture = ExtResource("5_task")
+expand_mode = 1
 
-[node name="Label" type="Label" parent="UI/TaskHint/Bar" unique_id=647993942]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 24
-text = "任务提示"
+[node name="Title" type="Label" parent="UI/TaskHint" unique_id=647993943]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -111.8
+offset_top = 54.2
+offset_right = 88.2
+offset_bottom = 69.2
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.56, 0.77, 0.78, 1)
+theme_override_font_sizes/font_size = 10
+text = "当前目标"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="UI/TaskHint" unique_id=647993942]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -161.8
+offset_top = 70.3
+offset_right = 138.2
+offset_bottom = 91.3
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
+theme_override_font_sizes/font_size = 14
+text = "观察房间，寻找线索"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Crosshair" type="Control" parent="UI" unique_id=649134839]
+texture_filter = 4
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -247,56 +253,40 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Reticle" type="Control" parent="UI/Crosshair" unique_id=649134840]
-custom_minimum_size = Vector2(32, 32)
+[node name="Reticle" type="TextureRect" parent="UI/Crosshair" unique_id=649134840]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -9.0
+offset_top = -9.0
+offset_right = 9.0
+offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="Vertical" type="ColorRect" parent="UI/Crosshair/Reticle" unique_id=649134841]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -1.0
-offset_top = -14.0
-offset_right = 1.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.45, 0.45, 0.45, 0.85)
-
-[node name="Horizontal" type="ColorRect" parent="UI/Crosshair/Reticle" unique_id=649134842]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -14.0
-offset_top = -1.0
-offset_right = 14.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.45, 0.45, 0.45, 0.85)
+texture = ExtResource("13_reticle")
+expand_mode = 1
 
 [node name="ItemSlots" type="Control" parent="UI" unique_id=750340719]
+texture_filter = 4
+theme = SubResource("Theme_hud")
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 52.0
+offset_top = 0.0
+offset_right = 52.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Slot1" type="Control" parent="UI/ItemSlots" unique_id=750340721]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -304,7 +294,41 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/ItemSlots" unique_id=750340720]
+[node name="Backplate" type="TextureRect" parent="UI/ItemSlots/Slot1" unique_id=750340722]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -244.6
+offset_top = -58.1
+offset_right = -80.4
+offset_bottom = -27.8
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_hint")
+expand_mode = 1
+
+[node name="Key" type="TextureRect" parent="UI/ItemSlots/Slot1" unique_id=750340723]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -229.9
+offset_top = -54.7
+offset_right = -208.3
+offset_bottom = -33.2
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_key1")
+expand_mode = 1
+
+[node name="Name" type="Label" parent="UI/ItemSlots/Slot1" unique_id=750340724]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -312,91 +336,35 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -48.0
-offset_right = -16.0
-offset_bottom = 48.0
+offset_top = -54.7
+offset_right = -125.0
+offset_bottom = -33.7
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_constants/separation = 10
-
-[node name="Slot1" type="HBoxContainer" parent="UI/ItemSlots/VBoxContainer" unique_id=750340721]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/separation = 6
-alignment = 2
-
-[node name="Index" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot1" unique_id=750340722]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
-
-[node name="Label" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot1/Index" unique_id=750340723]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 14
-text = "1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Name" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot1" unique_id=750340724]
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
 theme_override_font_sizes/font_size = 14
 text = "魔法棒"
 vertical_alignment = 1
 
-[node name="Icon" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot1" unique_id=750340725]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-size_flags_horizontal = 0
+[node name="Icon" type="TextureRect" parent="UI/ItemSlots/Slot1" unique_id=750340725]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -121.7
+offset_top = -68.2
+offset_right = -72.0
+offset_bottom = -18.5
+grow_horizontal = 0
+grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_item_icon")
+texture = ExtResource("11_slotwand")
+expand_mode = 1
 
-[node name="Slot2" type="HBoxContainer" parent="UI/ItemSlots/VBoxContainer" unique_id=750340726]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/separation = 6
-alignment = 2
-
-[node name="Index" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot2" unique_id=750340727]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
-
-[node name="Label" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot2/Index" unique_id=750340728]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 14
-text = "2"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Name" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot2" unique_id=750340729]
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 14
-text = "明信片"
-vertical_alignment = 1
-
-[node name="Icon" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot2" unique_id=750340730]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_item_icon")
-
-[node name="DialogPanel" type="Control" parent="UI" unique_id=666934176]
-layout_mode = 3
+[node name="Slot2" type="Control" parent="UI/ItemSlots" unique_id=750340726]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -404,27 +372,172 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="UI/DialogPanel" unique_id=666934177]
+[node name="Backplate" type="TextureRect" parent="UI/ItemSlots/Slot2" unique_id=750340727]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -244.6
+offset_top = 2.5
+offset_right = -80.4
+offset_bottom = 32.8
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_hint")
+expand_mode = 1
+
+[node name="Key" type="TextureRect" parent="UI/ItemSlots/Slot2" unique_id=750340728]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -229.9
+offset_top = 6.3
+offset_right = -208.3
+offset_bottom = 27.9
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_key2")
+expand_mode = 1
+
+[node name="Name" type="Label" parent="UI/ItemSlots/Slot2" unique_id=750340729]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = 6.1
+offset_right = -125.0
+offset_bottom = 27.1
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
+theme_override_font_sizes/font_size = 14
+text = "明信片"
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="UI/ItemSlots/Slot2" unique_id=750340730]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -121.7
+offset_top = -7.6
+offset_right = -72.0
+offset_bottom = 42.1
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12_slotcard")
+expand_mode = 1
+
+[node name="DialogPanel" type="Control" parent="UI" unique_id=666934176]
+texture_filter = 4
+theme = SubResource("Theme_hud")
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -140.0
+offset_left = 0.0
+offset_top = 21.0
+offset_right = 0.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Backplate" type="TextureRect" parent="UI/DialogPanel" unique_id=666934177]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -230.7
+offset_top = -120.4
+offset_right = 464.0
+offset_bottom = -41.3
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+texture = ExtResource("6_dialog")
+expand_mode = 1
 
-[node name="DialogText" type="Label" parent="UI/DialogPanel/Panel" unique_id=666934178]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
-theme_override_font_sizes/font_size = 26
-text = "对话文本"
-horizontal_alignment = 1
+[node name="Speaker" type="Label" parent="UI/DialogPanel" unique_id=666934179]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -151.2
+offset_top = -110.4
+offset_right = -51.2
+offset_bottom = -95.4
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.56, 0.77, 0.78, 1)
+theme_override_font_sizes/font_size = 11
+text = "博士"
 vertical_alignment = 1
+
+[node name="DialogText" type="Label" parent="UI/DialogPanel" unique_id=666934178]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -151.2
+offset_top = -89.0
+offset_right = 379.8
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
+theme_override_font_sizes/font_size = 16
+text = "先别急着判断。换个位置，再看一次。"
 autowrap_mode = 3
+
+[node name="ContinueMark" type="TextureRect" parent="UI/DialogPanel" unique_id=666934180]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 391.2
+offset_top = -62.7
+offset_right = 401.3
+offset_bottom = -54.3
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("14_continue")
+expand_mode = 1
+
+[node name="LayoutReference" type="TextureRect" parent="UI" unique_id=1844202917]
+visible = false
+modulate = Color(1, 1, 1, 0.5)
+texture_filter = 4
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("15_layoutref")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Sphere" parent="." unique_id=1217617389 instance=ExtResource("3_h2yge")]
