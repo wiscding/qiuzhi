@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dw525t3rpxvqk"]
+
+[ext_resource type="Script" uid="uid://cpypux375imur" path="res://Scripts/TriggerZone.cs" id="1_lqnpn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ex8gk"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8p2kq"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m5nte"]
+albedo_color = Color(0, 1, 0, 0.43137255)
+
+[node name="TriggerZone" type="Area3D" unique_id=440418904]
+script = ExtResource("1_lqnpn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1733094176]
+shape = SubResource("BoxShape3D_ex8gk")
+
+[node name="DebugVisual" type="MeshInstance3D" parent="." unique_id=1983929840]
+mesh = SubResource("BoxMesh_8p2kq")
+surface_material_override/0 = SubResource("StandardMaterial3D_m5nte")

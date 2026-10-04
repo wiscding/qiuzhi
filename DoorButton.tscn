@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://db7dnus65wf4n"]
+
+[ext_resource type="Script" uid="uid://b822raxwvjkkq" path="res://Scripts/DoorButton.cs" id="1_8bnaw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bjqgx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bjqgx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1xlpn"]
+albedo_color = Color(1, 0.7529412, 0, 1)
+
+[node name="DoorButton" type="StaticBody3D" unique_id=1511811888]
+script = ExtResource("1_8bnaw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=111229235]
+shape = SubResource("BoxShape3D_bjqgx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=59653532]
+mesh = SubResource("BoxMesh_bjqgx")
+surface_material_override/0 = SubResource("StandardMaterial3D_1xlpn")

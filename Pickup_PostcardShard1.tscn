@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dbxhbf12dqtn1" path="res://PickupItem.tscn" id="1_pickup"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shard"]
+albedo_color = Color(0.97, 0.82, 0.32, 1)
+
+[node name="Pickup_PostcardShard1" instance=ExtResource("1_pickup")]
+Item = 3
+Prompt = "按F拾取明信片碎片①"
+
+[node name="Mesh" parent="." index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_shard")

@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dbxhbf12dqtn1" path="res://PickupItem.tscn" id="1_pickup"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wand"]
+albedo_color = Color(0.62, 0.32, 0.9, 1)
+
+[node name="Pickup_MagicWand" instance=ExtResource("1_pickup")]
+Item = 2
+Prompt = "按F拾取魔法棒"
+
+[node name="Mesh" parent="." index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_wand")

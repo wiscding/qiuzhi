@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://c1mr8e6wumd25" path="res://Scripts/MovableBlock.cs" id="1_movableblock"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_movableblock"]
+size = Vector3(3, 0.4, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_movableblock"]
+size = Vector3(3, 0.4, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_movableblock"]
+albedo_color = Color(0.109804, 0.368627, 0.921569, 1)
+
+[node name="MovableBlock" type="CharacterBody3D"]
+script = ExtResource("1_movableblock")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_movableblock")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_movableblock")
+surface_material_override/0 = SubResource("StandardMaterial3D_movableblock")

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dbxhbf12dqtn1"]
+
+[ext_resource type="Script" uid="uid://ua0bwmdsk1px" path="res://Scripts/PickupItem.cs" id="1_ltixv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bjqgx"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_bjqgx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8jovo"]
+
+[node name="PickupItem" type="StaticBody3D" unique_id=39760732]
+script = ExtResource("1_ltixv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1873934782]
+shape = SubResource("SphereShape3D_bjqgx")
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=86395754]
+mesh = SubResource("SphereMesh_bjqgx")
+surface_material_override/0 = SubResource("StandardMaterial3D_8jovo")

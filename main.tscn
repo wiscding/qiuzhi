@@ -1,0 +1,430 @@
+[gd_scene format=3 uid="uid://dskmjt1in330f"]
+
+[ext_resource type="Script" uid="uid://v8nhepx3scjf" path="res://Scripts/Player.cs" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://duohr0nhok8t0" path="res://Scripts/ShardGuide.cs" id="2_5vw27"]
+[ext_resource type="PackedScene" uid="uid://cjjuwlbcab5mq" path="res://Sphere.tscn" id="3_h2yge"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xxo5k"]
+height = 1.9467773
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bjqgx"]
+height = 2.0605469
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8jovo"]
+albedo_color = Color(0.87973464, 0.78162766, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xxo5k"]
+size = Vector3(0.06, 0.06, 8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mop80"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.72156864, 0.7921569, 0, 0.40392157)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjqgx"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.11764706, 0.11764706, 0.11764706, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task"]
+bg_color = Color(1, 1, 1, 0.55)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.2, 0.2, 0.2, 0.35)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 24.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.82, 0.82, 0.82, 0.92)
+border_width_top = 4
+border_color = Color(0.1, 0.1, 0.1, 1)
+content_margin_left = 32.0
+content_margin_top = 24.0
+content_margin_right = 32.0
+content_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_item_icon"]
+bg_color = Color(0.55, 0.35, 0.85, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[node name="Main" type="Node3D" unique_id=898802338]
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=819517953]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
+script = ExtResource("1_ig7tw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=426806211]
+shape = SubResource("CapsuleShape3D_xxo5k")
+
+[node name="Body" type="MeshInstance3D" parent="Player" unique_id=925232495]
+mesh = SubResource("CapsuleMesh_bjqgx")
+surface_material_override/0 = SubResource("StandardMaterial3D_8jovo")
+
+[node name="ShardGuide" type="Node3D" parent="Player" unique_id=149903474]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_5vw27")
+
+[node name="Thread" type="MeshInstance3D" parent="Player/ShardGuide" unique_id=1792851042]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+mesh = SubResource("BoxMesh_xxo5k")
+surface_material_override/0 = SubResource("StandardMaterial3D_mop80")
+
+[node name="Head" type="Node3D" parent="Player" unique_id=1309296779]
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head" unique_id=369271008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42999983, 0)
+
+[node name="InteractRay" type="RayCast3D" parent="Player/Head/Camera3D" unique_id=328794122]
+target_position = Vector3(0, 0, -3)
+
+[node name="AimRay" type="RayCast3D" parent="Player/Head/Camera3D" unique_id=971419295]
+target_position = Vector3(0, 0, -5)
+collide_with_areas = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=50772787]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -1584.9409, 507.89832, -1263.1882)
+light_energy = 16.0
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1294755230]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -1584.9409, 507.89832, -1263.1882)
+light_energy = 16.0
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="." unique_id=1730056257]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1, 0)
+light_energy = 16.0
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1200127405]
+
+[node name="InteractHint" type="Label" parent="UI" unique_id=325532943]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -188.0
+offset_right = 160.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 28
+text = "按 F 交互"
+horizontal_alignment = 1
+visible = false
+
+[node name="KeyHints" type="Control" parent="UI" unique_id=2090555456]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/KeyHints" unique_id=1538754070]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 320.0
+offset_bottom = 100.0
+theme_override_constants/separation = 8
+
+[node name="HintF" type="HBoxContainer" parent="UI/KeyHints/VBoxContainer" unique_id=1315001743]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Key" type="PanelContainer" parent="UI/KeyHints/VBoxContainer/HintF" unique_id=37923688]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
+
+[node name="KeyLabel" type="Label" parent="UI/KeyHints/VBoxContainer/HintF/Key" unique_id=1982736401]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 16
+text = "F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Desc" type="Label" parent="UI/KeyHints/VBoxContainer/HintF" unique_id=1982736402]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 14
+text = "按下按钮/获取理智"
+vertical_alignment = 1
+
+[node name="HintE" type="HBoxContainer" parent="UI/KeyHints/VBoxContainer" unique_id=1315001744]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Key" type="PanelContainer" parent="UI/KeyHints/VBoxContainer/HintE" unique_id=37923689]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
+
+[node name="KeyLabel" type="Label" parent="UI/KeyHints/VBoxContainer/HintE/Key" unique_id=1982736403]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 16
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Desc" type="Label" parent="UI/KeyHints/VBoxContainer/HintE" unique_id=1982736404]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 14
+text = "重力切换"
+vertical_alignment = 1
+
+[node name="TaskHint" type="Control" parent="UI" unique_id=647993940]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Bar" type="PanelContainer" parent="UI/TaskHint" unique_id=647993941]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -240.0
+offset_top = 20.0
+offset_right = 240.0
+offset_bottom = 68.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_task")
+
+[node name="Label" type="Label" parent="UI/TaskHint/Bar" unique_id=647993942]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 24
+text = "任务提示"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Crosshair" type="Control" parent="UI" unique_id=649134839]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Reticle" type="Control" parent="UI/Crosshair" unique_id=649134840]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Vertical" type="ColorRect" parent="UI/Crosshair/Reticle" unique_id=649134841]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -14.0
+offset_right = 1.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.45, 0.45, 0.45, 0.85)
+
+[node name="Horizontal" type="ColorRect" parent="UI/Crosshair/Reticle" unique_id=649134842]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.0
+offset_top = -1.0
+offset_right = 14.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.45, 0.45, 0.45, 0.85)
+
+[node name="ItemSlots" type="Control" parent="UI" unique_id=750340719]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ItemSlots" unique_id=750340720]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -48.0
+offset_right = -16.0
+offset_bottom = 48.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Slot1" type="HBoxContainer" parent="UI/ItemSlots/VBoxContainer" unique_id=750340721]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 6
+alignment = 2
+
+[node name="Index" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot1" unique_id=750340722]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
+
+[node name="Label" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot1/Index" unique_id=750340723]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 14
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot1" unique_id=750340724]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 14
+text = "魔法棒"
+vertical_alignment = 1
+
+[node name="Icon" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot1" unique_id=750340725]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_item_icon")
+
+[node name="Slot2" type="HBoxContainer" parent="UI/ItemSlots/VBoxContainer" unique_id=750340726]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 6
+alignment = 2
+
+[node name="Index" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot2" unique_id=750340727]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjqgx")
+
+[node name="Label" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot2/Index" unique_id=750340728]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 14
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="UI/ItemSlots/VBoxContainer/Slot2" unique_id=750340729]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 14
+text = "明信片"
+vertical_alignment = 1
+
+[node name="Icon" type="PanelContainer" parent="UI/ItemSlots/VBoxContainer/Slot2" unique_id=750340730]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_item_icon")
+
+[node name="DialogPanel" type="Control" parent="UI" unique_id=666934176]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="UI/DialogPanel" unique_id=666934177]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="DialogText" type="Label" parent="UI/DialogPanel/Panel" unique_id=666934178]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 26
+text = "对话文本"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Sphere" parent="." unique_id=1217617389 instance=ExtResource("3_h2yge")]

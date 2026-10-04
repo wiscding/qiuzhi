@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://0xh5d1u71ub2"]
+
+[ext_resource type="Script" uid="uid://c34b1c6a2i0jo" path="res://Scripts/Door.cs" id="1_1vvux"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xxo5k"]
+size = Vector3(4, 5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ex8gk"]
+size = Vector3(4, 5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8p2kq"]
+albedo_color = Color(0.9999997, 0.107286744, 0.16224194, 1)
+
+[node name="Door" type="AnimatableBody3D" unique_id=1284787437]
+script = ExtResource("1_1vvux")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=165913031]
+shape = SubResource("BoxShape3D_xxo5k")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=873446532]
+mesh = SubResource("BoxMesh_ex8gk")
+surface_material_override/0 = SubResource("StandardMaterial3D_8p2kq")
