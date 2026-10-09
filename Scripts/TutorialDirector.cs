@@ -13,6 +13,7 @@ public partial class TutorialDirector : Node
 	private bool _dialog9Played;
 	private bool _dialog10Played;
 	private bool _centerFinaleDone;
+	private bool _enteredLayerB;
 
 	private Node3D _environment;
 
@@ -24,6 +25,7 @@ public partial class TutorialDirector : Node
 		GameEvents.DoorButtonPressed += OnDoorButtonPressed;
 		GameEvents.PuzzleCompleted += OnPuzzleCompleted;
 		GameEvents.DialogRequested += OnDialogRequested;
+		GameEvents.PlayerEnteredLayer += OnPlayerEnteredLayer;
 		CallDeferred(MethodName.PlayIntro);
 	}
 
@@ -34,6 +36,7 @@ public partial class TutorialDirector : Node
 		GameEvents.DoorButtonPressed -= OnDoorButtonPressed;
 		GameEvents.PuzzleCompleted -= OnPuzzleCompleted;
 		GameEvents.DialogRequested -= OnDialogRequested;
+		GameEvents.PlayerEnteredLayer -= OnPlayerEnteredLayer;
 	}
 
 	private void PlayIntro()
@@ -74,6 +77,7 @@ public partial class TutorialDirector : Node
 				}
 				break;
 			case "rubble":
+				// 石堆区在 B 层半径内；层状态由 Player 半径判定维护
 				if (!_dialog8Played)
 				{
 					_dialog8Played = true;
@@ -133,6 +137,14 @@ public partial class TutorialDirector : Node
 			return null;
 		var node = _environment.GetNodeOrNull<Node3D>(nodeName);
 		return node?.GlobalPosition;
+	}
+
+	private void OnPlayerEnteredLayer(GameLayer layer)
+	{
+		if (layer != GameLayer.LayerB || _enteredLayerB)
+			return;
+		_enteredLayerB = true;
+		GD.Print("[TutorialDirector] 首次进入 B 层");
 	}
 
 	private void OnItemCollected(ItemType type)

@@ -15,7 +15,14 @@ public partial class Player : CharacterBody3D
 	//从球心沿视线射出去时的初速度
 	[Export] public float LaunchSpeed = 6.0f;
 
+	/// <summary>距球心小于此值视为 B 层（内壳；新手屋通道内侧）。</summary>
+	[Export] public float LayerBMaxRadius = 10.0f;
+	/// <summary>距球心大于此值视为 C 层（外壳；出生点/新手屋）。中间为滞回带。</summary>
+	[Export] public float LayerCMinRadius = 10.5f;
+
 	private bool isHovering = false;
+	private GameLayer _currentLayer = GameLayer.LayerC;
+	private bool _layerInitialized;
 
 	private bool isCentrifugal = true;
 	//private float yaw = 0f;
@@ -59,6 +66,7 @@ public partial class Player : CharacterBody3D
 		// 从开始菜单点进来时，按钮松手可能把鼠标模式顶掉；延后一帧再捕获
 		CallDeferred(MethodName.CaptureMouseForLook);
 		CallDeferred(MethodName.SnapSpawnToShell);
+		CallDeferred(MethodName.InitLayerFromPosition);
 	}
 
 	public override void _ExitTree()
@@ -82,6 +90,37 @@ public partial class Player : CharacterBody3D
 	private void CaptureMouseForLook()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+	}
+
+	private void InitLayerFromPosition()
+	{
+		_layerInitialized = false;
+		UpdateLayerFromPosition();
+	}
+
+	/// <summary>
+	/// 双壳按距球心半径判定：C=外壳（大半径），B=内壳（小半径）。
+	/// LayerBMaxRadius～LayerCMinRadius 为滞回带，避免通道附近来回抖。
+	/// 球心悬停时保持上一层，不因半径≈0 误判。
+	/// </summary>
+	private void UpdateLayerFromPosition()
+	{
+		float r = GlobalPosition.Length();
+		if (r < HoverRadius)
+			return;
+
+		GameLayer next = _currentLayer;
+		if (r <= LayerBMaxRadius)
+			next = GameLayer.LayerB;
+		else if (r >= LayerCMinRadius)
+			next = GameLayer.LayerC;
+
+		if (_layerInitialized && next == _currentLayer)
+			return;
+
+		_currentLayer = next;
+		_layerInitialized = true;
+		GameEvents.EmitPlayerEnteredLayer(next);
 	}
 
 	/// <summary>出生点靠近新手屋时，沿径向贴到球壳内侧，减少穿模。</summary>
@@ -211,6 +250,7 @@ public partial class Player : CharacterBody3D
 			UpDirection = up;
 
 		MoveAndSlide();
+		UpdateLayerFromPosition();
 
 		//瞄准检测（门本体射线会先打到门碰撞，再在同级找 DoorHandle）
 		Interactable hit = null;
