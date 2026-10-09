@@ -1,13 +1,27 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" uid="uid://dbxhbf12dqtn1" path="res://PickupItem.tscn" id="1_pickup"]
+[ext_resource type="Texture2D" uid="uid://mn72ndkxwgjy" path="res://Art/PlayMenu/PNG/icon_postcard.png" id="2_icon"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shard"]
-albedo_color = Color(0.97, 0.82, 0.32, 1)
+albedo_color = Color(1, 0.92, 0.55, 1)
+albedo_texture = ExtResource("2_icon")
+emission_enabled = true
+emission = Color(0.75, 0.55, 0.15, 1)
+emission_energy_multiplier = 0.55
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="BoxMesh_card"]
+size = Vector3(1.4, 0.08, 1.0)
 
 [node name="Pickup_PostcardShard1" instance=ExtResource("1_pickup")]
 Item = 3
-Prompt = "按F拾取明信片碎片①"
+Prompt = "按F拾取明信片碎片"
+UnlockPuzzleGroup = "tutorial_thirds"
 
 [node name="Mesh" parent="." index="1"]
+visible = false
+
+[node name="CardVisual" type="MeshInstance3D" parent="." index="2"]
+mesh = SubResource("BoxMesh_card")
 surface_material_override/0 = SubResource("StandardMaterial3D_shard")

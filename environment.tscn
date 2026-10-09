@@ -11,6 +11,33 @@
 [ext_resource type="PackedScene" path="res://BlockSlot_Third.tscn" id="9_3jj1w"]
 [ext_resource type="PackedScene" path="res://Pickup_GravityBoots.tscn" id="10_3gbvy"]
 [ext_resource type="PackedScene" uid="uid://dw525t3rpxvqk" path="res://TriggerZone.tscn" id="11_7q7v2"]
+[ext_resource type="Script" uid="uid://dsndnxd1k4o5u" path="res://Scripts/SceneMeshCollision.cs" id="12_col"]
+[ext_resource type="PackedScene" path="res://DoorHandle.tscn" id="13_handle"]
+[ext_resource type="Script" uid="uid://d15grlq5ixa83" path="res://Scripts/PassageGate.cs" id="14_gate"]
+[ext_resource type="Script" uid="uid://d3nseflbdl4ax" path="res://Scripts/CentripetalPattern.cs" id="15_pattern"]
+[ext_resource type="Texture2D" uid="uid://ypv26nva44pu" path="res://Art/Pentagon/puzzle_01.png" id="16_pent"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_passage"]
+size = Vector3(1.8, 0.55, 1.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_passage"]
+size = Vector3(1.8, 0.55, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_passage"]
+transparency = 1
+albedo_color = Color(0.2, 0.2, 0.25, 0.15)
+
+[sub_resource type="QuadMesh" id="QuadMesh_pattern"]
+size = Vector2(2.4, 2.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pattern"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.92)
+albedo_texture = ExtResource("16_pent")
+emission_enabled = true
+emission = Color(0.55, 0.75, 1, 1)
+emission_energy_multiplier = 0.85
 
 [node name="Node3D" type="Node3D" unique_id=1079096597]
 
@@ -20,74 +47,123 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0010075569, 0, -0.01308894
 [node name="Door" parent="." unique_id=1284787437 instance=ExtResource("2_wetts")]
 transform = Transform3D(0.16262057, 0, -0.023456717, 0, 0.16430362, 0, 0.023456717, 0, 0.16262057, 1.7498599, -10.986076, -0.30859268)
 
+[node name="DoorHandle" parent="." unique_id=1095859548 instance=ExtResource("13_handle")]
+transform = Transform3D(0.16262057, 0, -0.023456717, 0, 0.16430362, 0, 0.023456717, 0, 0.16262057, 1.7498599, -10.986076, -0.30859268)
+
 [node name="DoorButton" parent="." unique_id=1511811888 instance=ExtResource("4_00014")]
 transform = Transform3D(0.18386681, 0, 0, 0, 0.18386681, 0, 0, 0, 0.18386681, -2.9109683, -12.225083, 0.9728242)
 
 [node name="DoorButton2" parent="." unique_id=737036440 instance=ExtResource("4_00014")]
 editor_description = "按下后触发对话4"
 transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 2.273338, -10.859543, -0.08125822)
+ButtonIndex = 2
 
 [node name="DoorButton3" parent="." unique_id=394971505 instance=ExtResource("4_00014")]
 transform = Transform3D(0.17123213, 0.023442835, -0.050299063, -0.0074848924, 0.17141594, 0.054410987, 0.054986708, -0.049669024, 0.164041, -1.0878048, -11.368632, 3.4423559)
+ButtonIndex = 3
 
 [node name="MovableBlock" parent="." unique_id=334624090 instance=ExtResource("5_dm4p5")]
 editor_description = "被移开后触发对话7"
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.6164213, -10.512373, -2.1840873)
-visible = false
 
 [node name="BlockSlot" parent="." unique_id=1678670126 instance=ExtResource("6_pk5nr")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -2.324189, -12.411735, -1.4436736)
+RequiredBlockIndex = 1
+PuzzleGroup = "tutorial_cover"
 
 [node name="Door2" parent="." unique_id=2100981204 instance=ExtResource("2_wetts")]
+editor_description = "拾取明信片碎片后消失"
 transform = Transform3D(0.18938275, 0.018663965, -0.06152905, 0.002638709, 0.18897133, 0.06544358, 0.06424332, -0.0627812, 0.17869334, -1.1138642, -9.882354, 3.1064289)
+OpenOnDoorUnlocked = false
+HideOnItem = 3
 
 [node name="MovableBlock_Third3" parent="." unique_id=1796625354 instance=ExtResource("7_pk5nr")]
 transform = Transform3D(0.35345626, 0.15908735, 0.22860417, 0, 0.36936313, -0.25704256, -0.2785115, 0.20189625, 0.29011938, 2.4795372, -8.736512, -0.07922417)
+BlockIndex = 4
 
 [node name="MovableBlock_Third2" parent="." unique_id=105911177 instance=ExtResource("7_pk5nr")]
 transform = Transform3D(-0.10397503, -0.4362786, 0.03674615, 0.3508423, -0.06043102, 0.27524146, -0.26191407, 0.09224513, 0.35410723, 2.8453102, -9.1097975, 0.4613083)
+BlockIndex = 3
 
 [node name="MovableBlock_Third" parent="." unique_id=1717796485 instance=ExtResource("7_pk5nr")]
 transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 2.646972, -8.982272, -0.01784338)
+BlockIndex = 2
 
 [node name="Pickup_MagicWand" parent="." unique_id=202960383 instance=ExtResource("7_4sbom")]
 editor_description = "拾取后触发对话6"
-transform = Transform3D(0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, 2.8168051, -10.6, -1.2680234)
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 2.8168051, -10.6, -1.2680234)
 
 [node name="Pickup_PostcardShard1" parent="." unique_id=1594401655 instance=ExtResource("8_2bfpd")]
-editor_description = "拾取后门消失，触发对话10"
+editor_description = "石堆拼齐后可拾取；拾取后 Door2 消失，触发对话10"
 transform = Transform3D(0.12, 0, 0, 0, 0.12, 0, 0, 0, 0.12, 3.1466117, -8.565707, 0.024146974)
 
 [node name="BlockSlot_Third" parent="." unique_id=355866286 instance=ExtResource("9_3jj1w")]
-editor_description = "三个拼齐后，在向心模式下显示出一些图案/花纹，触发对话9"
+editor_description = "石堆：Required=2 对齐 BlockIndex=2；三槽编号对齐拼齐后触发对话9+向心纹路"
 transform = Transform3D(0.45, 0, 1.2991951e-08, 0, 0.45, 0, -1.2991951e-08, 0, 0.45, 0.61881286, -10.460656, -2.1854959)
+RequiredBlockIndex = 2
+PuzzleGroup = "tutorial_thirds"
 
 [node name="BlockSlot_Third2" parent="." unique_id=1883629698 instance=ExtResource("9_3jj1w")]
 transform = Transform3D(-0.22172564, 0, -0.39158362, 0, 0.45, 0, 0.39158362, 0, -0.22172564, 0.61881286, -10.460656, -2.1854959)
+RequiredBlockIndex = 3
+PuzzleGroup = "tutorial_thirds"
 
 [node name="BlockSlot_Third3" parent="." unique_id=449309597 instance=ExtResource("9_3jj1w")]
 transform = Transform3D(-0.22317852, 0, 0.39075735, 0, 0.44999996, 0, -0.39075735, 0, -0.22317852, 0.6150369, -10.460656, -2.1885216)
+RequiredBlockIndex = 4
+PuzzleGroup = "tutorial_thirds"
 
 [node name="Pickup_GravityBoots" parent="." unique_id=1704490722 instance=ExtResource("10_3gbvy")]
-editor_description = "拾取后重力转换靴在右侧切换栏目中出现"
+editor_description = "对话2结束后才可拾取；拾取后出现在右侧道具栏"
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.52735996, -12.259267, 2.8550699)
 
 [node name="TriggerZone" parent="." unique_id=440418904 instance=ExtResource("11_7q7v2")]
-editor_description = "对话1+视线引导+对话2"
+editor_description = "开场区域（对话1由 TutorialDirector 自动播）"
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.9693254, -11.91148, 3.6093738)
+TriggerId = "intro"
 
 [node name="TriggerZone2" parent="." unique_id=1600449006 instance=ExtResource("11_7q7v2")]
-editor_description = "视线引导看指示灯+对话3"
+editor_description = "看向门后触发对话2；结束后可捡附近重力靴"
 transform = Transform3D(0.19860135, 0, -0.02361151, 0, 0.2, 0, 0.02361151, 0, 0.19860135, 1.7341142, -10.979964, 0.12894195)
+TriggerId = "door_hint"
 
 [node name="TriggerZone3" parent="." unique_id=526650619 instance=ExtResource("11_7q7v2")]
 editor_description = "视线引导看向盖住通道的可移动地块+触发对话5"
 transform = Transform3D(0.3503495, 0, 0.19301617, 0, 0.4, 0, -0.19301617, 0, 0.3503495, 1.4455106, -11.52461, -1.5850168)
+TriggerId = "cover_block"
 
 [node name="TriggerZone4" parent="." unique_id=129663021 instance=ExtResource("11_7q7v2")]
 editor_description = "视线引导看向石堆，触发对话8"
 transform = Transform3D(0.37398612, 0.04986742, -0.13284408, 0.010116406, 0.36416098, 0.16517985, 0.1415343, -0.15779729, 0.33921683, -1.4099984, -9.410905, 1.70657)
+TriggerId = "rubble"
 
 [node name="TriggerZone5" parent="." unique_id=1947706140 instance=ExtResource("11_7q7v2")]
-editor_description = "视线引导看向圆心，触发对话11"
-transform = Transform3D(0.37398612, 0.04986742, -0.13284408, 0.010116406, 0.36416098, 0.16517985, 0.1415343, -0.15779729, 0.33921683, -1.4099984, -9.410905, 3.6861753)
+editor_description = "圆心观察：视线看向球心；有碎片后目标变为新手引导完成（无对话11）"
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 0, 0, 0)
+TriggerId = "c_center"
+OnlyOnce = false
+
+[node name="PassageGate" type="StaticBody3D" parent="." unique_id=879521019]
+editor_description = "盖板正确入槽前挡住通道"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6164213, -10.512373, -2.1840873)
+script = ExtResource("14_gate")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PassageGate" unique_id=455623315]
+shape = SubResource("BoxShape3D_passage")
+
+[node name="DebugMesh" type="MeshInstance3D" parent="PassageGate" unique_id=302550488]
+visible = false
+mesh = SubResource("BoxMesh_passage")
+surface_material_override/0 = SubResource("StandardMaterial3D_passage")
+
+[node name="CentripetalPattern" type="Node3D" parent="." unique_id=821729320]
+editor_description = "石堆拼齐后，向心模式下显示五边形占位画面"
+transform = Transform3D(1, 0, 0, 0, -0.08715574, 0.9961947, 0, -0.9961947, -0.08715574, 0.61881286, -10.35, -2.1854959)
+script = ExtResource("15_pattern")
+
+[node name="Quad" type="MeshInstance3D" parent="CentripetalPattern" unique_id=984089126]
+mesh = SubResource("QuadMesh_pattern")
+surface_material_override/0 = SubResource("StandardMaterial3D_pattern")
+
+[node name="MeshCollision" type="Node" parent="." unique_id=672463872]
+script = ExtResource("12_col")

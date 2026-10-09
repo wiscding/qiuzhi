@@ -42,12 +42,20 @@ public static class GameEvents
 		DoorUnlocked?.Invoke();
 	}
 
-	//移动地块
+	//移动地块（moved=true 表示放进了某个缺口）
 	public static event Action<int, bool> BlockMoved;
 	public static void EmitBlockMoved(int blockId, bool moved)
 	{
 		GD.Print($"[GameEvents] 地块 {blockId} 移动状态：{moved}");
 		BlockMoved?.Invoke(blockId, moved);
+	}
+
+	//一组缺口全部放对
+	public static event Action<string> PuzzleCompleted;
+	public static void EmitPuzzleCompleted(string puzzleId)
+	{
+		GD.Print($"[GameEvents] 拼图完成：{puzzleId}");
+		PuzzleCompleted?.Invoke(puzzleId);
 	}
 
 	//玩家进入某一层
@@ -66,11 +74,49 @@ public static class GameEvents
 		DialogRequested?.Invoke(dialogId);
 	}
 
+	public static event Action<string> DialogStarted;
+	public static void EmitDialogStarted(string dialogId)
+	{
+		GD.Print($"[GameEvents] 对话开始：{dialogId}");
+		DialogStarted?.Invoke(dialogId);
+	}
+
+	public static event Action<string> DialogEnded;
+	public static void EmitDialogEnded(string dialogId = "")
+	{
+		GD.Print($"[GameEvents] 对话结束：{dialogId}");
+		DialogEnded?.Invoke(dialogId);
+	}
+
 	//玩家进入触发区(3，4，5号事件)
 	public static event Action<string> TriggerEntered;
 	public static void EmitTriggerEntered(string triggerId)
 	{
 		GD.Print($"[GameEvents] 玩家进入触发区：{triggerId}");
 		TriggerEntered?.Invoke(triggerId);
+	}
+
+	//当前目标文案变化
+	public static event Action<string> ObjectiveChanged;
+	public static void EmitObjectiveChanged(string text)
+	{
+		GD.Print($"[GameEvents] 当前目标：{text}");
+		ObjectiveChanged?.Invoke(text);
+	}
+
+	//装备切换
+	public static event Action<EquippedTool> EquippedChanged;
+	public static void EmitEquippedChanged(EquippedTool tool)
+	{
+		GD.Print($"[GameEvents] 装备切换：{tool}");
+		EquippedChanged?.Invoke(tool);
+	}
+
+	//请求玩家视线看向某世界坐标（触发区引导）
+	public static event Action<Vector3, float> LookAtRequested;
+	public static void EmitLookAtRequested(Vector3 worldPosition, float duration = 1.1f)
+	{
+		GD.Print($"[GameEvents] 视线引导 → {worldPosition}");
+		LookAtRequested?.Invoke(worldPosition, duration);
 	}
 }

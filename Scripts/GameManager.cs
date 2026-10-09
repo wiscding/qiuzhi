@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class GameManager : Node
 {
@@ -18,8 +19,8 @@ public partial class GameManager : Node
 		GameEvents.DoorButtonPressed += OnDoorButtonPressed;
 		GameEvents.DoorUnlocked += OnDoorUnlocked;
 		GameEvents.BlockMoved += OnBlockMoved;
+		GameEvents.PuzzleCompleted += OnPuzzleCompleted;
 		GameEvents.PlayerEnteredLayer += OnPlayerEnteredLayer;
-		GameEvents.DialogRequested += OnDialogRequested;
 		GameEvents.TriggerEntered += OnTriggerEntered;
 	}
 
@@ -31,8 +32,8 @@ public partial class GameManager : Node
 		GameEvents.DoorButtonPressed -= OnDoorButtonPressed;
 		GameEvents.DoorUnlocked -= OnDoorUnlocked;
 		GameEvents.BlockMoved -= OnBlockMoved;
+		GameEvents.PuzzleCompleted -= OnPuzzleCompleted;
 		GameEvents.PlayerEnteredLayer -= OnPlayerEnteredLayer;
-		GameEvents.DialogRequested -= OnDialogRequested;
 		GameEvents.TriggerEntered -= OnTriggerEntered;
 	}
 
@@ -46,10 +47,11 @@ public partial class GameManager : Node
 	{
 		GD.Print($"[GameManager] 收到获得道具：{type}");
 		State.AddItem(type);
-		if (!postcardAssembled && State.PostcardShardCount >= 3)
+		// 新手关目前只有一块碎片，拾取即视为获得明信片
+		if (!postcardAssembled && State.HasPostcard)
 		{
 			postcardAssembled = true;
-			GD.Print("[GameManager] 明信片碎片集齐，拼成了完整的明信片！");
+			GD.Print("[GameManager] 获得明信片碎片");
 		}
 	}
 
@@ -82,6 +84,40 @@ public partial class GameManager : Node
 		{
 			State.UnmarkBlockMoved(blockId);
 		}
+		CheckPuzzles();
+	}
+
+	private void CheckPuzzles()
+	{
+		var groups = new Dictionary<string, (int filled, int total)>();
+		foreach (Node node in GetTree().GetNodesInGroup("block_slot"))
+		{
+			if (node is not BlockSlot slot)
+				continue;
+			if (string.IsNullOrEmpty(slot.PuzzleGroup))
+				continue;
+			if (!groups.TryGetValue(slot.PuzzleGroup, out var counts))
+				counts = (0, 0);
+			counts.total++;
+			if (slot.IsCorrect)
+				counts.filled++;
+			groups[slot.PuzzleGroup] = counts;
+		}
+
+		foreach (var pair in groups)
+		{
+			if (pair.Value.total == 0 || pair.Value.filled < pair.Value.total)
+				continue;
+			if (State.CompletedPuzzles.Contains(pair.Key))
+				continue;
+			State.CompletedPuzzles.Add(pair.Key);
+			GameEvents.EmitPuzzleCompleted(pair.Key);
+		}
+	}
+
+	private void OnPuzzleCompleted(string puzzleId)
+	{
+		GD.Print($"[GameManager] 拼图完成：{puzzleId}");
 	}
 
 	private void OnPlayerEnteredLayer(GameLayer layer)
@@ -90,22 +126,13 @@ public partial class GameManager : Node
 		State.CurrentLayer = layer;
 	}
 
-	private void OnDialogRequested(string dialogId)
-	{
-		GD.Print($"[GameManager] 收到对话请求：{dialogId}");
-		//接对话系统
-	}
-
 	private void OnTriggerEntered(string triggerId)
 	{
 		GD.Print($"[GameManager] 处理触发区：{triggerId}");
-		//按 id 分发：弹对话/给道具/开门/点亮丝线等
-		//5号事件：到达C层圆心处观察景观
-		if(triggerId == "c_center")
+		if (triggerId == "c_center")
 		{
 			State.CenterObserved = true;
 			GD.Print("[GameManager] 已到达圆心，景观观察完成");
 		}
-		GameEvents.EmitDialogRequested(triggerId);
 	}
 }

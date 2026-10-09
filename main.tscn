@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://dskmjt1in330f"]
 
 [ext_resource type="Script" uid="uid://v8nhepx3scjf" path="res://Scripts/Player.cs" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://duohr0nhok8t0" path="res://Scripts/ShardGuide.cs" id="2_5vw27"]
-[ext_resource type="PackedScene" uid="uid://cjjuwlbcab5mq" path="res://Sphere.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://03y56bbmpe7s" path="res://environment.tscn" id="3_env"]
 [ext_resource type="Texture2D" uid="uid://c8qbjjqj6djja" path="res://Art/PlayMenu/PNG/hint_backplate.png" id="4_hint"]
 [ext_resource type="Texture2D" uid="uid://bmy0uomyqtjnc" path="res://Art/PlayMenu/PNG/task_backplate.png" id="5_task"]
 [ext_resource type="Texture2D" uid="uid://bxfy0c22adauf" path="res://Art/PlayMenu/PNG/dialogue_backplate.png" id="6_dialog"]
@@ -15,6 +14,9 @@
 [ext_resource type="Texture2D" uid="uid://r425l68rdf6f" path="res://Art/PlayMenu/PNG/reticle_idle.png" id="13_reticle"]
 [ext_resource type="Texture2D" uid="uid://g32q2stcvurp" path="res://Art/PlayMenu/PNG/continue_mark.png" id="14_continue"]
 [ext_resource type="Texture2D" uid="uid://d03cu40vnt5vr" path="res://Art/PlayMenu/02_提示与对话_透明叠加.png" id="15_layoutref"]
+[ext_resource type="Script" uid="uid://cd500r7wn3j6w" path="res://Scripts/DialogueUI.cs" id="16_dialogui"]
+[ext_resource type="Script" uid="uid://d3nv4pbd72uuy" path="res://Scripts/TutorialDirector.cs" id="17_tutorial"]
+[ext_resource type="Script" uid="uid://b2auofmjp21av" path="res://Scripts/HudController.cs" id="18_hud"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xxo5k"]
 height = 1.9467773
@@ -25,17 +27,8 @@ height = 2.0605469
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8jovo"]
 albedo_color = Color(0.87973464, 0.78162766, 0, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_xxo5k"]
-size = Vector3(0.06, 0.06, 8)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mop80"]
-transparency = 1
-shading_mode = 0
-albedo_color = Color(0.72156864, 0.7921569, 0, 0.40392157)
-
 [sub_resource type="SystemFont" id="SystemFont_hud"]
 font_names = PackedStringArray("Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC")
-font_weight = 400
 
 [sub_resource type="Theme" id="Theme_hud"]
 default_font = SubResource("SystemFont_hud")
@@ -43,7 +36,8 @@ default_font = SubResource("SystemFont_hud")
 [node name="Main" type="Node3D" unique_id=898802338]
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=819517953]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
+editor_description = "新手屋附近；运行时 SnapSpawnToShell 贴壳防穿模"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, -11.3, 3.5)
 script = ExtResource("1_ig7tw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=426806211]
@@ -52,15 +46,6 @@ shape = SubResource("CapsuleShape3D_xxo5k")
 [node name="Body" type="MeshInstance3D" parent="Player" unique_id=925232495]
 mesh = SubResource("CapsuleMesh_bjqgx")
 surface_material_override/0 = SubResource("StandardMaterial3D_8jovo")
-
-[node name="ShardGuide" type="Node3D" parent="Player" unique_id=149903474]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-script = ExtResource("2_5vw27")
-
-[node name="Thread" type="MeshInstance3D" parent="Player/ShardGuide" unique_id=1792851042]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-mesh = SubResource("BoxMesh_xxo5k")
-surface_material_override/0 = SubResource("StandardMaterial3D_mop80")
 
 [node name="Head" type="Node3D" parent="Player" unique_id=1309296779]
 
@@ -87,10 +72,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1, 0)
 light_energy = 16.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1200127405]
+script = ExtResource("18_hud")
 
 [node name="KeyHints" type="Control" parent="UI" unique_id=2090555456]
 texture_filter = 4
-theme = SubResource("Theme_hud")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -102,6 +87,7 @@ offset_bottom = -46.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = SubResource("Theme_hud")
 
 [node name="HintE" type="Control" parent="UI/KeyHints" unique_id=1315001744]
 layout_mode = 1
@@ -146,11 +132,11 @@ vertical_alignment = 1
 [node name="InteractHint" type="Label" parent="UI" unique_id=325532943]
 visible = false
 texture_filter = 4
-theme = SubResource("Theme_hud")
 offset_left = 61.3
 offset_top = 61.8
 offset_right = 61.3
 offset_bottom = 85.8
+theme = SubResource("Theme_hud")
 theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
 theme_override_font_sizes/font_size = 14
 text = "按下按钮 / 获取理智"
@@ -184,18 +170,16 @@ expand_mode = 1
 
 [node name="TaskHint" type="Control" parent="UI" unique_id=647993940]
 texture_filter = 4
-theme = SubResource("Theme_hud")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
 offset_top = -30.0
-offset_right = 0.0
 offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = SubResource("Theme_hud")
 
 [node name="Backplate" type="TextureRect" parent="UI/TaskHint" unique_id=647993941]
 layout_mode = 1
@@ -239,7 +223,7 @@ offset_bottom = 91.3
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.95, 0.93, 0.87, 1)
 theme_override_font_sizes/font_size = 14
-text = "观察房间，寻找线索"
+text = "听完开场，观察附近的房门"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -272,18 +256,16 @@ expand_mode = 1
 
 [node name="ItemSlots" type="Control" parent="UI" unique_id=750340719]
 texture_filter = 4
-theme = SubResource("Theme_hud")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 52.0
-offset_top = 0.0
 offset_right = 52.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = SubResource("Theme_hud")
 
 [node name="Slot1" type="Control" parent="UI/ItemSlots" unique_id=750340721]
 layout_mode = 1
@@ -442,19 +424,18 @@ texture = ExtResource("12_slotcard")
 expand_mode = 1
 
 [node name="DialogPanel" type="Control" parent="UI" unique_id=666934176]
+visible = false
 texture_filter = 4
-theme = SubResource("Theme_hud")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
 offset_top = 21.0
-offset_right = 0.0
 offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = SubResource("Theme_hud")
 
 [node name="Backplate" type="TextureRect" parent="UI/DialogPanel" unique_id=666934177]
 layout_mode = 1
@@ -540,4 +521,18 @@ texture = ExtResource("15_layoutref")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Sphere" parent="." unique_id=1217617389 instance=ExtResource("3_h2yge")]
+[node name="DialogueUI" type="Control" parent="UI" unique_id=1223201992]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("16_dialogui")
+
+[node name="TutorialDirector" type="Node" parent="." unique_id=779578655]
+script = ExtResource("17_tutorial")
+
+[node name="Environment" parent="." unique_id=1217617389 instance=ExtResource("3_env")]

@@ -6,7 +6,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float MouseSensitivity = 0.002f;
 
 	//测试用拥有重力切换开关
-	[Export] public bool HasGravitySwitch = true;
+	[Export] public bool HasGravitySwitch = false;
 
 	//离球心多近算"在核心附近"（只用于让速度收敛，必须小于小球的内半径）
 	[Export] public float HoverRadius = 1.5f;
@@ -39,16 +39,44 @@ public partial class Player : CharacterBody3D
 	//当前射线瞄准的可交互物
 	private Interactable targetInteractable = null;
 
+	[Export] public float LookAssistSpeed = 3.2f;
+	private Vector3? _lookAssistTarget;
+	private float _lookAssistTime;
+
 	public override void _Ready()
 	{
+		AddToGroup("player");
 		//gravityPivot = GetNode<Node3D>("GravityPivot");
 		head = GetNode<Node3D>("Head");
 		interactRay = GetNode<RayCast3D>("Head/Camera3D/InteractRay");
 		aimRay = GetNode<RayCast3D>("Head/Camera3D/AimRay");
 		hintLabel = GetNode<Label>("../UI/InteractHint");
+		HasGravitySwitch = GameManager.Instance != null &&
+			GameManager.Instance.State.HasItem(ItemType.GravityBoots);
+		GameEvents.ItemCollected += OnItemCollected;
+		GameEvents.LookAtRequested += OnLookAtRequested;
 
 		// 从开始菜单点进来时，按钮松手可能把鼠标模式顶掉；延后一帧再捕获
 		CallDeferred(MethodName.CaptureMouseForLook);
+		CallDeferred(MethodName.SnapSpawnToShell);
+	}
+
+	public override void _ExitTree()
+	{
+		GameEvents.ItemCollected -= OnItemCollected;
+		GameEvents.LookAtRequested -= OnLookAtRequested;
+	}
+
+	private void OnLookAtRequested(Vector3 worldPosition, float duration)
+	{
+		_lookAssistTarget = worldPosition;
+		_lookAssistTime = Mathf.Max(0.2f, duration);
+	}
+
+	private void OnItemCollected(ItemType type)
+	{
+		if (type == ItemType.GravityBoots)
+			HasGravitySwitch = true;
 	}
 
 	private void CaptureMouseForLook()
@@ -56,8 +84,37 @@ public partial class Player : CharacterBody3D
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
+	/// <summary>出生点靠近新手屋时，沿径向贴到球壳内侧，减少穿模。</summary>
+	private void SnapSpawnToShell()
+	{
+		Vector3 outward = GlobalPosition.LengthSquared() > 0.01f
+			? GlobalPosition.Normalized()
+			: Vector3.Down;
+		var space = GetWorld3D().DirectSpaceState;
+		var query = PhysicsRayQueryParameters3D.Create(outward * 7f, outward * 16f);
+		query.CollideWithAreas = false;
+		query.Exclude = new Godot.Collections.Array<Rid> { GetRid() };
+		var hit = space.IntersectRay(query);
+		if (hit.Count == 0)
+			return;
+
+		Vector3 point = hit["position"].AsVector3();
+		Vector3 normal = hit["normal"].AsVector3();
+		// 站在内侧：沿法线（朝球心一侧）抬起约胶囊半高
+		GlobalPosition = point + normal.Normalized() * 1.05f;
+		GD.Print($"[Player] 出生贴壳 → {GlobalPosition}");
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
+		if (DialogueUI.IsOpen)
+		{
+			Velocity = Vector3.Zero;
+			hintLabel.Visible = false;
+			HudController.Instance?.SetAimingInteractable(false);
+			return;
+		}
+
 		bool isAiming = Input.IsActionPressed("aim");
 		Vector3 up = GetUpVector();
 
@@ -84,9 +141,18 @@ public partial class Player : CharacterBody3D
 		//悬停时保留当前朝向；转身轴换成"当前基的 Y 轴"——它是最后一次有效重建出来的上方向
 		Vector3 turnAxis = isHovering ? b.Y : up;
 
-		//这一帧累积的鼠标转身量，绕本地上轴施加
-		if (pendingYaw != 0f)
+		//触发区视线引导：优先于鼠标累积量
+		if (_lookAssistTarget.HasValue && _lookAssistTime > 0f)
 		{
+			_lookAssistTime -= (float)delta;
+			ApplyLookAssist(ref b, up, (float)delta);
+			pendingYaw = 0f;
+			if (_lookAssistTime <= 0f)
+				_lookAssistTarget = null;
+		}
+		else if (pendingYaw != 0f)
+		{
+			//这一帧累积的鼠标转身量，绕本地上轴施加
 			b = b.Rotated(turnAxis, pendingYaw);
 			pendingYaw = 0f;
 		}
@@ -146,10 +212,10 @@ public partial class Player : CharacterBody3D
 
 		MoveAndSlide();
 
-		//瞄准检测
+		//瞄准检测（门本体射线会先打到门碰撞，再在同级找 DoorHandle）
 		Interactable hit = null;
-		if (interactRay.IsColliding() && interactRay.GetCollider() is Interactable inter && inter.CanInteract())
-			hit = inter;
+		if (interactRay.IsColliding())
+			hit = FindInteractable(interactRay.GetCollider() as Node);
 		targetInteractable = hit;
 
 		if (targetInteractable != null)
@@ -161,6 +227,8 @@ public partial class Player : CharacterBody3D
 		{
 			hintLabel.Visible = false;
 		}
+
+		HudController.Instance?.SetAimingInteractable(targetInteractable != null);
 
 		if (Input.IsActionJustPressed("place") && isAiming)
 		{
@@ -183,6 +251,8 @@ public partial class Player : CharacterBody3D
 	public override void _Input(InputEvent @event)
 	{
 		// 用 _Input 而不是 _UnhandledInput：HUD（准星等）在屏幕中心会吞掉鼠标事件
+		if (DialogueUI.IsOpen)
+			return;
 		if (Input.MouseMode != Input.MouseModeEnum.Captured)
 			return;
 		if (@event is not InputEventMouseMotion motion)
@@ -207,37 +277,90 @@ public partial class Player : CharacterBody3D
 			//缺口空出来，并通知总线这块离开了
 			if (block.CurrentSlot != null)
 			{
-				block.CurrentSlot.IsOccupied = false;
-				block.CurrentSlot = null;
+				block.CurrentSlot.Clear();
 				GameEvents.EmitBlockMoved(block.BlockIndex, false);
 			}
 			heldBlock = block;
 			heldBlock.IsHeld = true;
 			heldBlock.SetCollisionEnabled(false);
-			GD.Print("[Player] 抓起地块");
+			GD.Print($"[Player] 抓起地块 {block.BlockIndex}");
 		}
 	}
 
 	private void TryPlaceBlock()
 	{
-		if (aimRay.IsColliding() && aimRay.GetCollider() is BlockSlot slot && !slot.IsOccupied)
+		if (!aimRay.IsColliding())
 		{
-			heldBlock.GlobalPosition = slot.GlobalPosition;   //坐标吸附
-			heldBlock.SetCollisionEnabled(true);              //恢复碰撞
-			heldBlock.IsHeld = false;
-			slot.IsOccupied = true;                           //缺口被占
-			heldBlock.CurrentSlot = slot;                     //双向绑定
-			GameEvents.EmitBlockMoved(heldBlock.BlockIndex, true);
-			heldBlock = null;                                 //松手
-			GD.Print("[Player] 放置地块");
+			GD.Print("[Player] 放置失败：射线没打到任何东西");
+			return;
 		}
-		else
+
+		if (aimRay.GetCollider() is not BlockSlot hitSlot)
 		{
-			if (aimRay.IsColliding())
-				GD.Print($"[Player] 放置失败：瞄准到的是 {(aimRay.GetCollider() as Node)?.Name}");
-			else
-				GD.Print("[Player] 放置失败：射线没打到任何东西");
+			GD.Print($"[Player] 放置失败：瞄准到的是 {(aimRay.GetCollider() as Node)?.Name}");
+			return;
 		}
+
+		// 石堆三槽常叠在同一洞口：射线可能打到错误编号，按 BlockIndex 找同组可收的空槽
+		BlockSlot slot = ResolvePlaceSlot(hitSlot, heldBlock);
+		if (slot == null || !slot.Accepts(heldBlock))
+		{
+			GD.Print($"[Player] 放置失败：缺口只要 {hitSlot.RequiredBlockIndex}，手里是 {heldBlock.BlockIndex}");
+			return;
+		}
+
+		slot.Place(heldBlock);
+		GameEvents.EmitBlockMoved(heldBlock.BlockIndex, true);
+		GD.Print($"[Player] 放置地块 {heldBlock.BlockIndex} → {slot.Name}（Required={slot.RequiredBlockIndex}）");
+		heldBlock = null;
+	}
+
+	/// <summary>编号对齐即可放置；叠槽时优先落到 RequiredBlockIndex == BlockIndex 的空缺口。</summary>
+	private static BlockSlot ResolvePlaceSlot(BlockSlot hit, MovableBlock block)
+	{
+		if (hit == null || block == null)
+			return null;
+		if (hit.Accepts(block))
+			return hit;
+
+		if (string.IsNullOrEmpty(hit.PuzzleGroup))
+			return null;
+
+		const float maxDistSq = 0.6f * 0.6f;
+		BlockSlot best = null;
+		float bestDist = maxDistSq;
+		foreach (Node node in hit.GetTree().GetNodesInGroup("block_slot"))
+		{
+			if (node is not BlockSlot slot)
+				continue;
+			if (slot.PuzzleGroup != hit.PuzzleGroup)
+				continue;
+			if (!slot.Accepts(block))
+				continue;
+			float d = slot.GlobalPosition.DistanceSquaredTo(hit.GlobalPosition);
+			if (d > bestDist)
+				continue;
+			bestDist = d;
+			best = slot;
+		}
+		return best;
+	}
+
+	private static Interactable FindInteractable(Node node)
+	{
+		if (node is Interactable direct && direct.CanInteract())
+			return direct;
+		if (node == null)
+			return null;
+		Node parent = node.GetParent();
+		if (parent == null)
+			return null;
+		foreach (Node child in parent.GetChildren())
+		{
+			if (child is Interactable sibling && sibling.CanInteract())
+				return sibling;
+		}
+		return null;
 	}
 
 	//玩家相对球心的方向
@@ -247,7 +370,36 @@ public partial class Player : CharacterBody3D
 	}
 
 	private Vector3 GetUpVector()
-	{	
+	{
 		return isCentrifugal ? -RadialOut() : RadialOut();
+	}
+
+	private void ApplyLookAssist(ref Basis b, Vector3 up, float delta)
+	{
+		if (!_lookAssistTarget.HasValue)
+			return;
+
+		Vector3 eye = head.GlobalPosition;
+		Vector3 to = _lookAssistTarget.Value - eye;
+		if (to.LengthSquared() < 0.0001f)
+			return;
+
+		Vector3 desired = to.Normalized();
+		Vector3 flatDesired = desired - up * desired.Dot(up);
+		Vector3 flatCurrent = -b.Z;
+		flatCurrent -= up * flatCurrent.Dot(up);
+		if (flatDesired.LengthSquared() > 0.0001f && flatCurrent.LengthSquared() > 0.0001f)
+		{
+			flatDesired = flatDesired.Normalized();
+			flatCurrent = flatCurrent.Normalized();
+			float ang = Mathf.Atan2(flatCurrent.Cross(flatDesired).Dot(up), flatCurrent.Dot(flatDesired));
+			float step = Mathf.Clamp(ang, -LookAssistSpeed * delta, LookAssistSpeed * delta);
+			b = b.Rotated(up, step);
+		}
+
+		// 相对切平面的仰角 → 头部俯仰（负值抬头）
+		float elev = Mathf.Asin(Mathf.Clamp(desired.Dot(up), -1f, 1f));
+		float targetPitch = Mathf.Clamp(-elev, -1.5f, 1.5f);
+		pitch = Mathf.MoveToward(pitch, targetPitch, LookAssistSpeed * delta);
 	}
 }

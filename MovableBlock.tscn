@@ -9,7 +9,9 @@ size = Vector3(3, 0.4, 3)
 size = Vector3(3, 0.4, 3)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_movableblock"]
-albedo_color = Color(0.109804, 0.368627, 0.921569, 1)
+albedo_color = Color(0.45, 0.42, 0.38, 1)
+roughness = 0.92
+metallic = 0.05
 
 [node name="MovableBlock" type="CharacterBody3D"]
 script = ExtResource("1_movableblock")

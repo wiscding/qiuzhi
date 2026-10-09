@@ -8,6 +8,11 @@ public partial class MovableBlock : CharacterBody3D
 	//当前所在缺口（拿在手里 / 没放进去时为 null）
 	public BlockSlot CurrentSlot{get; set;} = null;
 
+	public override void _Ready()
+	{
+		AddToGroup("movable_block");
+	}
+
 	//测试
 	//private Vector3 lastPos;
 	//public override void _PhysicsProcess(double delta)
