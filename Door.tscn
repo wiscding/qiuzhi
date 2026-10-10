@@ -1,36 +1,22 @@
 [gd_scene format=3 uid="uid://0xh5d1u71ub2"]
 
 [ext_resource type="Script" uid="uid://c34b1c6a2i0jo" path="res://Scripts/Door.cs" id="1_1vvux"]
+[ext_resource type="PackedScene" uid="uid://dpkldplkum0ug" path="res://Models/04_门_含门框与开关动画.glb" id="2_door"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xxo5k"]
-size = Vector3(4, 5, 0.5)
+size = Vector3(2.2, 5, 0.4)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ex8gk"]
-size = Vector3(4, 5, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8p2kq"]
-albedo_color = Color(0.42, 0.28, 0.18, 1)
-roughness = 0.85
-metallic = 0.05
-
-[sub_resource type="BoxMesh" id="BoxMesh_frame"]
-size = Vector3(4.2, 5.2, 0.12)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frame"]
-albedo_color = Color(0.22, 0.16, 0.12, 1)
-roughness = 0.7
-
-[node name="Door" type="AnimatableBody3D"]
+[node name="Door" type="AnimatableBody3D" unique_id=479609705]
 script = ExtResource("1_1vvux")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1932489011]
 shape = SubResource("BoxShape3D_xxo5k")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_ex8gk")
-surface_material_override/0 = SubResource("StandardMaterial3D_8p2kq")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=858366041]
+visible = false
 
-[node name="Frame" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2)
-mesh = SubResource("BoxMesh_frame")
-surface_material_override/0 = SubResource("StandardMaterial3D_frame")
+[node name="Frame" type="MeshInstance3D" parent="." unique_id=2095684980]
+visible = false
+
+[node name="DoorModel" parent="." unique_id=88674289 instance=ExtResource("2_door")]
+transform = Transform3D(2.1, 0, 0, 0, 2.1, 0, 0, 0, 2.1, 0, -2.4, 0)

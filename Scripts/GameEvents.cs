@@ -119,4 +119,12 @@ public static class GameEvents
 		GD.Print($"[GameEvents] 视线引导 → {worldPosition}");
 		LookAtRequested?.Invoke(worldPosition, duration);
 	}
+
+	/// <summary>圆心明信片视线检测三条件同时满足。</summary>
+	public static event Action PostcardSightSucceeded;
+	public static void EmitPostcardSightSucceeded()
+	{
+		GD.Print("[GameEvents] 明信片视线检测成功");
+		PostcardSightSucceeded?.Invoke();
+	}
 }

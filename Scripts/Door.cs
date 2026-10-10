@@ -4,16 +4,19 @@ public partial class Door : AnimatableBody3D
 {
 	[Export] public float OpenDistance = 5f;
 	[Export] public float OpenSpeed = 3f;
-	/// <summary>三按钮解锁后下沉开门（新手屋正门）。</summary>
+	/// <summary>三按钮解锁后播放开门动画（无动画则下沉）。</summary>
 	[Export] public bool OpenOnDoorUnlocked = true;
 	/// <summary>拾取该道具后直接消失（密室门）。</summary>
 	[Export] public ItemType HideOnItem = ItemType.None;
+	[Export] public string OpenAnimationName = "Animation";
 
 	private bool isOpening;
 	private float targetY;
+	private AnimationPlayer _anim;
 
 	public override void _Ready()
 	{
+		_anim = FindChild("AnimationPlayer", recursive: true, owned: false) as AnimationPlayer;
 		if (OpenOnDoorUnlocked)
 			GameEvents.DoorUnlocked += OnDoorUnlocked;
 		if (HideOnItem != ItemType.None)
@@ -28,6 +31,15 @@ public partial class Door : AnimatableBody3D
 
 	private void OnDoorUnlocked()
 	{
+		DisableCollision();
+		AudioSettings.Instance?.PlayDoorOpenSfx();
+		if (_anim != null && _anim.HasAnimation(OpenAnimationName))
+		{
+			_anim.Play(OpenAnimationName);
+			GD.Print($"[Door] {Name} 解锁，播放开门动画");
+			return;
+		}
+
 		isOpening = true;
 		targetY = Position.Y - OpenDistance;
 		GD.Print($"[Door] {Name} 解锁，开始下沉");
@@ -38,12 +50,17 @@ public partial class Door : AnimatableBody3D
 		if (type != HideOnItem)
 			return;
 		Visible = false;
+		DisableCollision();
+		GD.Print($"[Door] {Name} 因拾取 {type} 消失");
+	}
+
+	private void DisableCollision()
+	{
 		foreach (Node child in GetChildren())
 		{
 			if (child is CollisionShape3D shape)
 				shape.SetDeferred(CollisionShape3D.PropertyName.Disabled, true);
 		}
-		GD.Print($"[Door] {Name} 因拾取 {type} 消失");
 	}
 
 	public override void _PhysicsProcess(double delta)

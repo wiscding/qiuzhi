@@ -14,6 +14,7 @@ public partial class TutorialDirector : Node
 	private bool _dialog10Played;
 	private bool _centerFinaleDone;
 	private bool _enteredLayerB;
+	private bool _dialog18Played;
 
 	private Node3D _environment;
 
@@ -26,6 +27,8 @@ public partial class TutorialDirector : Node
 		GameEvents.PuzzleCompleted += OnPuzzleCompleted;
 		GameEvents.DialogRequested += OnDialogRequested;
 		GameEvents.PlayerEnteredLayer += OnPlayerEnteredLayer;
+		GameEvents.PostcardSightSucceeded += OnPostcardSightSucceeded;
+		GameEvents.DialogEnded += OnDialogEnded;
 		CallDeferred(MethodName.PlayIntro);
 	}
 
@@ -37,6 +40,8 @@ public partial class TutorialDirector : Node
 		GameEvents.PuzzleCompleted -= OnPuzzleCompleted;
 		GameEvents.DialogRequested -= OnDialogRequested;
 		GameEvents.PlayerEnteredLayer -= OnPlayerEnteredLayer;
+		GameEvents.PostcardSightSucceeded -= OnPostcardSightSucceeded;
+		GameEvents.DialogEnded -= OnDialogEnded;
 	}
 
 	private void PlayIntro()
@@ -117,7 +122,32 @@ public partial class TutorialDirector : Node
 		await ToSignal(GetTree().CreateTimer(0.85), SceneTreeTimer.SignalName.Timeout);
 		if (!IsInsideTree())
 			return;
-		GameEvents.EmitObjectiveChanged("新手引导完成");
+		GameEvents.EmitObjectiveChanged("新手引导完成 · 圆心举明信片右键对准拼图");
+	}
+
+	private void OnPostcardSightSucceeded()
+	{
+		if (_dialog18Played)
+			return;
+		_dialog18Played = true;
+		GameEvents.EmitDialogRequested("dialog_18");
+	}
+
+	private void OnDialogEnded(string dialogId)
+	{
+		if (dialogId != "dialog_18")
+			return;
+		GameEvents.EmitObjectiveChanged("离开关卡结算");
+		GD.Print("[TutorialDirector] 对话 18 结束 → 返回开始菜单结算");
+		CallDeferred(MethodName.GoToSettlement);
+	}
+
+	private void GoToSettlement()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Visible;
+		Error err = GetTree().ChangeSceneToFile("res://StartMenu.tscn");
+		if (err != Error.Ok)
+			GD.PrintErr($"[TutorialDirector] 返回开始菜单失败：{err}");
 	}
 
 	private async void LookThenDialog(string dialogId, Vector3? lookAt)

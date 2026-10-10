@@ -217,6 +217,9 @@ public partial class HudController : CanvasLayer
 			case "dialog_10":
 				SetObjective("前往密室中心，观察景观");
 				break;
+			case "dialog_18":
+				SetObjective("离开关卡结算");
+				break;
 		}
 	}
 

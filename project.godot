@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://drwtqv4wl7u22"
 MCPRuntime="*uid://btyuhtdl6suhr"
+AudioSettings="*uid://bq8audio5ettings"
 
 [display]
 
@@ -32,6 +33,10 @@ project/assembly_name="test1"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [input]
 

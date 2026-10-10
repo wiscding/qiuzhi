@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://cd500r7wn3j6w" path="res://Scripts/DialogueUI.cs" id="16_dialogui"]
 [ext_resource type="Script" uid="uid://d3nv4pbd72uuy" path="res://Scripts/TutorialDirector.cs" id="17_tutorial"]
 [ext_resource type="Script" uid="uid://b2auofmjp21av" path="res://Scripts/HudController.cs" id="18_hud"]
+[ext_resource type="Script" uid="uid://cpostcardsight01" path="res://Scripts/PostcardSightDetector.cs" id="19_sight"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xxo5k"]
 height = 1.9467773
@@ -534,5 +535,10 @@ script = ExtResource("16_dialogui")
 
 [node name="TutorialDirector" type="Node" parent="." unique_id=779578655]
 script = ExtResource("17_tutorial")
+
+[node name="PostcardSightDetector" type="Node" parent="TutorialDirector"]
+script = ExtResource("19_sight")
+PlanePath = NodePath("../../Environment/CentripetalPattern")
+CenterZonePath = NodePath("../../Environment/TriggerZone5")
 
 [node name="Environment" parent="." unique_id=1217617389 instance=ExtResource("3_env")]

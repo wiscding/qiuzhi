@@ -48,8 +48,7 @@ public static class DialogueCatalog
 			"dialog_9" => OverlayMe(MeThink,
 				"拼上去之后，从里往外看竟然浮出了纹路——只有在一种重力状态下才有。为什么换个方向看，它才肯显形？\n先记下这件事。这种特性，后面一定用得上。"),
 			"dialog_10" => Dialog10(),
-			"dialog_18" => OverlayMe(MeEnd,
-				"哈\n本以为会是什么宏大的课题，结果……\n居然只是当年授课的教室吗\n……\n我该回去了，也该去再见见你，老师。"),
+			"dialog_18" => Dialog18(),
 			_ => null,
 		};
 	}
@@ -82,6 +81,32 @@ public static class DialogueCatalog
 			new("我", "第四位学生",
 				"「风暴的中心」……是指这个密室的中心吗？要看到全貌，就得站到他说的那个位置去。这里看不全。我上去。",
 				DialogueLayout.Overlay, MeThink, AvMe, true),
+		};
+	}
+
+	private static List<DialogueLine> Dialog18()
+	{
+		string full = FirstExisting(PostcardFront, PostcardFrame, PostcardIcon);
+		return new List<DialogueLine>
+		{
+			new("", "",
+				"（全屏展示明信片完整图片）",
+				DialogueLayout.FullscreenImage, full),
+			new("我", "第四位学生",
+				"哈",
+				DialogueLayout.Overlay, MeEnd, AvMe, true),
+			new("我", "第四位学生",
+				"本以为会是什么宏大的课题，结果……",
+				DialogueLayout.Overlay, MeEnd, AvMe, true),
+			new("我", "第四位学生",
+				"居然只是当年授课的教室吗",
+				DialogueLayout.Overlay, MeEnd, AvMe, true),
+			new("我", "第四位学生",
+				"……",
+				DialogueLayout.Overlay, MeEnd, AvMe, true),
+			new("我", "第四位学生",
+				"我该回去了，也该去再见见你，老师。",
+				DialogueLayout.Overlay, MeEnd, AvMe, true),
 		};
 	}
 

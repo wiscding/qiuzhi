@@ -270,7 +270,9 @@ public partial class Player : CharacterBody3D
 
 		HudController.Instance?.SetAimingInteractable(targetInteractable != null);
 
-		if (Input.IsActionJustPressed("place") && isAiming)
+		// 地块抓放仅在装备魔法棒时；装备明信片时右键留给视线对准
+		var equipped = GameManager.Instance?.State.Equipped ?? EquippedTool.None;
+		if (Input.IsActionJustPressed("place") && isAiming && equipped == EquippedTool.MagicWand)
 		{
 			if (!GameManager.Instance.State.HasItem(ItemType.MagicWand))
 				GD.Print("[Player] 还没有魔法棒，无法操作地块");
